@@ -1,0 +1,231 @@
+{
+  "dataset_name": "UNSW_NB15_training-set_cleaned.csv",
+  "dataset_scope": "Unidirectional IP Traffic Flow Records",
+  "threat_class_monitored": "DoS (Denial of Service / Protocol Flood)",
+  "limitation_statement": "The UNSW-NB15 'DoS' class serves as the supervised training signal for DoS, protocol flood, and volumetric traffic anomalies in unidirectional networks. It does not represent complete coverage of every complex multi-vector DDoS attack.",
+  "training_timestamp": "2026-09-12T15:50:47.874922Z",
+  "selected_model": "XGBoost",
+  "input_features": {
+    "numerical": [
+      "dur",
+      "spkts",
+      "sbytes",
+      "rate",
+      "sttl",
+      "sload",
+      "sloss",
+      "sinpkt",
+      "sjit",
+      "swin",
+      "smean",
+      "is_sm_ips_ports"
+    ],
+    "categorical": [
+      "proto",
+      "service",
+      "state"
+    ],
+    "total_count": 15
+  },
+  "class_mapping": {
+    "0": "Normal",
+    "1": "DoS"
+  },
+  "performance_metrics": {
+    "model_name": "XGBoost",
+    "accuracy": 0.9818690678997323,
+    "precision": 0.8831615120274914,
+    "recall": 0.9425427872860636,
+    "f1_score": 0.911886457717327,
+    "roc_auc": 0.9945660146699267,
+    "confusion_matrix": {
+      "true_negative": 7298,
+      "false_positive": 102,
+      "false_negative": 47,
+      "true_positive": 771
+    },
+    "training_time_sec": 0.66,
+    "inference_throughput_fps": 372120.6,
+    "latency_ms_per_flow": 0.0027
+  },
+  "all_models_compared": {
+    "Random_Forest": {
+      "model_name": "Random_Forest",
+      "accuracy": 0.9878315891944512,
+      "precision": 0.9465174129353234,
+      "recall": 0.9303178484107579,
+      "f1_score": 0.938347718865598,
+      "roc_auc": 0.9938879435670389,
+      "confusion_matrix": {
+        "true_negative": 7357,
+        "false_positive": 43,
+        "false_negative": 57,
+        "true_positive": 761
+      },
+      "training_time_sec": 1.64,
+      "inference_throughput_fps": 91177.9,
+      "latency_ms_per_flow": 0.011
+    },
+    "XGBoost": {
+      "model_name": "XGBoost",
+      "accuracy": 0.9818690678997323,
+      "precision": 0.8831615120274914,
+      "recall": 0.9425427872860636,
+      "f1_score": 0.911886457717327,
+      "roc_auc": 0.9945660146699267,
+      "confusion_matrix": {
+        "true_negative": 7298,
+        "false_positive": 102,
+        "false_negative": 47,
+        "true_positive": 771
+      },
+      "training_time_sec": 0.66,
+      "inference_throughput_fps": 372120.6,
+      "latency_ms_per_flow": 0.0027
+    }
+  },
+  "top_feature_importances": {
+    "state_INT": 0.6422132849693298,
+    "proto_arp": 0.09413127601146698,
+    "proto_udp": 0.06921225786209106,
+    "service_-": 0.04360416159033775,
+    "swin": 0.02921517938375473,
+    "sttl": 0.028750183060765266,
+    "state_FIN": 0.016236281022429466,
+    "state_REQ": 0.011580058373510838,
+    "service_http": 0.00962117686867714,
+    "sloss": 0.007417056709527969,
+    "rate": 0.007157640065997839,
+    "spkts": 0.006980651989579201,
+    "smean": 0.004535416141152382,
+    "sbytes": 0.004473774693906307,
+    "sjit": 0.0034743454307317734,
+    "proto_unas": 0.002886812435463071,
+    "service_ftp": 0.002788641257211566,
+    "state_CON": 0.0025887261144816875,
+    "service_smtp": 0.002502622315660119,
+    "proto_igmp": 0.0018279990181326866
+  },
+  "empirical_normal_baselines": {
+    "dur": {
+      "mean": 0.9932099534121621,
+      "std": 3.982881926156138,
+      "median": 0.223359,
+      "min": 0.0,
+      "max": 59.999989,
+      "p5": 4e-06,
+      "p95": 2.2491331999999993,
+      "p99": 15.590977
+    },
+    "spkts": {
+      "mean": 22.46304054054054,
+      "std": 44.9077659395588,
+      "median": 10.0,
+      "min": 1.0,
+      "max": 690.0,
+      "p5": 2.0,
+      "p95": 84.0,
+      "p99": 230.0
+    },
+    "sbytes": {
+      "mean": 4025.362804054054,
+      "std": 14887.74538437057,
+      "median": 952.0,
+      "min": 46.0,
+      "max": 339100.0,
+      "p5": 90.0,
+      "p95": 17562.69999999999,
+      "p99": 68181.0
+    },
+    "rate": {
+      "mean": 28453.623382675676,
+      "std": 103508.85052870715,
+      "median": 116.7912765,
+      "min": 0.0,
+      "max": 1000000.003,
+      "p5": 4.362285750000001,
+      "p95": 166666.6608,
+      "p99": 500000.0013
+    },
+    "sttl": {
+      "mean": 124.5389864864865,
+      "std": 107.9640047679681,
+      "median": 62.0,
+      "min": 0.0,
+      "max": 254.0,
+      "p5": 31.0,
+      "p95": 254.0,
+      "p99": 254.0
+    },
+    "sload": {
+      "mean": 38879232.41622055,
+      "std": 184824995.8876808,
+      "median": 90436.363285,
+      "min": 0.0,
+      "max": 4368000000.0,
+      "p5": 1876.8794682500002,
+      "p95": 208000000.0,
+      "p99": 851200000.0
+    },
+    "sloss": {
+      "mean": 4.2682094594594595,
+      "std": 7.758660988546421,
+      "median": 2.0,
+      "min": 0.0,
+      "max": 132.0,
+      "p5": 0.0,
+      "p95": 18.0,
+      "p99": 30.0
+    },
+    "sinpkt": {
+      "mean": 1562.4817317497634,
+      "std": 9066.327507496599,
+      "median": 15.984115,
+      "min": 0.0,
+      "max": 60009.992,
+      "p5": 0.004,
+      "p95": 578.282575149993,
+      "p99": 60000.724
+    },
+    "sjit": {
+      "mean": 7981.612028074899,
+      "std": 64680.70590543769,
+      "median": 641.689488,
+      "min": 0.0,
+      "max": 1483830.917,
+      "p5": 0.0,
+      "p95": 10494.0906345,
+      "p99": 36036.99198
+    },
+    "swin": {
+      "mean": 191.83591216216217,
+      "std": 110.06545264456334,
+      "median": 255.0,
+      "min": 0.0,
+      "max": 255.0,
+      "p5": 0.0,
+      "p95": 255.0,
+      "p99": 255.0
+    },
+    "smean": {
+      "mean": 152.99597972972973,
+      "std": 211.70154715972086,
+      "median": 73.0,
+      "min": 28.0,
+      "max": 1500.0,
+      "p5": 45.0,
+      "p95": 715.0,
+      "p99": 1136.0
+    },
+    "is_sm_ips_ports": {
+      "mean": 0.02456081081081081,
+      "std": 0.1547849695160529,
+      "median": 0.0,
+      "min": 0.0,
+      "max": 1.0,
+      "p5": 0.0,
+      "p95": 0.0,
+      "p99": 1.0
+    }
+  }
+}
