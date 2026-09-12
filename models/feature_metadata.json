@@ -3,7 +3,7 @@
   "dataset_scope": "Unidirectional IP Traffic Flow Records",
   "threat_class_monitored": "DoS (Denial of Service / Protocol Flood)",
   "limitation_statement": "The UNSW-NB15 'DoS' class serves as the supervised training signal for DoS, protocol flood, and volumetric traffic anomalies in unidirectional networks. It does not represent complete coverage of every complex multi-vector DDoS attack.",
-  "training_timestamp": "2026-09-12T15:50:47.874922Z",
+  "training_timestamp": "2026-09-12T18:43:57.586232+00:00",
   "selected_model": "XGBoost",
   "input_features": {
     "numerical": [
@@ -44,9 +44,9 @@
       "false_negative": 47,
       "true_positive": 771
     },
-    "training_time_sec": 0.66,
-    "inference_throughput_fps": 372120.6,
-    "latency_ms_per_flow": 0.0027
+    "training_time_sec": 0.64,
+    "inference_throughput_fps": 399277.1,
+    "latency_ms_per_flow": 0.0025
   },
   "all_models_compared": {
     "Random_Forest": {
@@ -62,9 +62,9 @@
         "false_negative": 57,
         "true_positive": 761
       },
-      "training_time_sec": 1.64,
-      "inference_throughput_fps": 91177.9,
-      "latency_ms_per_flow": 0.011
+      "training_time_sec": 1.32,
+      "inference_throughput_fps": 90309.5,
+      "latency_ms_per_flow": 0.0111
     },
     "XGBoost": {
       "model_name": "XGBoost",
@@ -79,9 +79,9 @@
         "false_negative": 47,
         "true_positive": 771
       },
-      "training_time_sec": 0.66,
-      "inference_throughput_fps": 372120.6,
-      "latency_ms_per_flow": 0.0027
+      "training_time_sec": 0.64,
+      "inference_throughput_fps": 399277.1,
+      "latency_ms_per_flow": 0.0025
     }
   },
   "top_feature_importances": {

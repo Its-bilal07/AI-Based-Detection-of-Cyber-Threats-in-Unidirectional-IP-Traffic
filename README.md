@@ -153,3 +153,50 @@ npm run preview
 ## ⚖️ Hackathon Statement of Compliance
 
 This software is an **observation and intelligence system**. It complies strictly with unidirectional optical tap / data diode requirements. It contains **no features** to alter network packets, inject TCP resets, probe external nodes, execute remote commands, or decrypt TLS traffic.
+
+## Real ML Inference Pipeline
+
+The dashboard now uses replay-based near-real-time inference from the FastAPI service. The replay reads one flow at a time from `data/holdout_test_set.csv`, sends the 15 passive flow features through the serialized preprocessing/model pipeline, and emits model output over Server-Sent Events. No packets are transmitted, probed, blocked, or decrypted.
+
+### Training scope
+
+The first supervised detector filters `attack_cat` to `Normal` and `DoS`, maps them to `0` and `1`, and excludes both `label` and `attack_cat` from features. The source CSV contains 82,332 rows with no missing values; the binary subset contains 37,000 Normal and 4,089 DoS rows. Features are 12 numerical flow fields (`dur`, `spkts`, `sbytes`, `rate`, `sttl`, `sload`, `sloss`, `sinpkt`, `sjit`, `swin`, `smean`, `is_sm_ips_ports`) and 3 categorical fields (`proto`, `service`, `state`). Numerical fields are standardized and categorical fields are one-hot encoded inside the saved pipeline.
+
+The stratified split uses 80% training and 20% test data with `random_state=42`. Random Forest and XGBoost are compared; XGBoost is selected because DoS recall is the primary security metric.
+
+Measured XGBoost test results:
+
+| Metric | Result |
+| --- | ---: |
+| Accuracy | 98.19% |
+| Precision (DoS) | 88.32% |
+| Recall (DoS) | 94.25% |
+| F1 (DoS) | 91.19% |
+| ROC-AUC | 0.9946 |
+| Confusion matrix | TN 7,298 / FP 102 / FN 47 / TP 771 |
+| Batch inference throughput | 317,749 flows/sec |
+
+The saved artifacts are `models/dos_detection_model.pkl` and `models/feature_metadata.json`. Evidence is derived from model-selected feature importance plus divergence from Normal training baselines; confidence is the model probability and severity is calculated by the backend alert rules.
+
+### API and replay
+
+Start the API with:
+
+```powershell
+python -m pip install -r requirements.txt
+python ml/train_model.py
+python -m uvicorn backend.main:app --reload --port 8000
+```
+
+`POST /predict` accepts a `features` object containing the 15 flow fields and returns `Normal` or `DoS`, probability confidence, severity, and evidence. `GET /replay/stream?scenario=Mixed%20Attack&interval_ms=600` emits SSE events consumed by the React dashboard. The frontend adapter is in `src/services/trafficSimulator.ts`; it retains the existing dashboard callback/control contract while replacing client-side random generation with the API stream. Run the dashboard separately:
+
+```powershell
+npm install
+npm run dev
+```
+
+The observed single-flow API smoke test returned Normal confidence `0.9998` and DoS confidence `0.9987`; actual latency varies by machine and request. The replay is a near-real-time demonstration, not live packet capture. Its source is a labeled holdout CSV and its scenario selection intentionally chooses replay pools; it must not be presented as production network telemetry.
+
+### Limitations and roadmap
+
+UNSW-NB15's `DoS` class is a supervised signal for DoS/volumetric/protocol-flood behavior. It is **not equivalent to complete real-world DDoS coverage** and does not by itself cover SYN floods, UDP reflection/amplification, spoofed-source floods, C2 beaconing, DGA/DNS tunneling, TLS/QUIC malware metadata, port scanning, or data exfiltration. Additional datasets and separately validated models can be added behind the same flow schema and replay/API boundary.

@@ -15,7 +15,7 @@ This script trains a supervised binary classifier (Normal vs DoS) on unidirectio
 import os
 import json
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 import joblib
 import numpy as np
 import pandas as pd
@@ -236,7 +236,7 @@ def train_and_evaluate():
             "protocol flood, and volumetric traffic anomalies in unidirectional networks. "
             "It does not represent complete coverage of every complex multi-vector DDoS attack."
         ),
-        "training_timestamp": datetime.utcnow().isoformat() + "Z",
+        "training_timestamp": datetime.now(timezone.utc).isoformat(),
         "selected_model": best_model_name,
         "input_features": {
             "numerical": num_cols,
