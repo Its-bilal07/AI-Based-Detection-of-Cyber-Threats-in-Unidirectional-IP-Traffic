@@ -4,10 +4,7 @@ import {
   Play,
   Pause,
   RotateCcw,
-  Lock,
-  Radio,
   FileCode2,
-  Sliders,
   ChevronDown
 } from 'lucide-react';
 import { useSOC } from '../context/SOCContext';
@@ -53,70 +50,41 @@ export const Header: React.FC = () => {
   ];
 
   return (
-    <header className="bg-[#0E1526]/90 backdrop-blur-md border-b border-slate-800 sticky top-0 z-40 px-4 lg:px-6 py-3 shadow-2xl">
+    <header className="bg-[#0D1117] border-b border-slate-800/80 sticky top-0 z-40 px-4 lg:px-6 py-2.5">
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
-        {/* Project Branding & SOC Status Indicators */}
+        {/* Product Identity & Operational Status */}
         <div className="flex items-center space-x-3">
-          <div className="p-2.5 bg-cyan-500/10 border border-cyan-500/30 rounded-lg shadow-inner">
-            <ShieldAlert className="w-7 h-7 text-cyan-400" />
-          </div>
-          <div>
-            <div className="flex items-center space-x-2.5">
-              <h1 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
-                AI Threat Detection
-                <span className="text-xs font-mono font-medium px-2 py-0.5 rounded bg-cyan-950 text-cyan-400 border border-cyan-800/60">
-                  v2.4-SOC
-                </span>
-              </h1>
-            </div>
-            <p className="text-xs text-slate-400 font-medium tracking-wide">
-              AI-Based Detection of Cyber Threats in Unidirectional IP Traffic
-            </p>
-          </div>
-
-          {/* Operational Badges */}
-          <div className="hidden md:flex items-center space-x-2 pl-4 border-l border-slate-800">
-            {/* Status indicator: ● Monitoring */}
-            <div className="flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono font-semibold">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+          <ShieldAlert className="w-5 h-5 text-slate-300 shrink-0" />
+          <div className="flex flex-col sm:flex-row sm:items-baseline sm:space-x-3">
+            <h1 className="text-sm font-semibold text-slate-100 tracking-tight">
+              AI Threat Detection Console
+            </h1>
+            <div className="flex items-center space-x-2 text-xs text-slate-400">
+              <span className="hidden sm:inline text-slate-600">•</span>
+              <span className="flex items-center gap-1.5 text-emerald-400 font-medium">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 inline-block"></span>
+                Monitoring
               </span>
-              <span>● Monitoring</span>
-            </div>
-
-            {/* Data source: Simulated IP Traffic */}
-            <div className="flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-slate-800/80 border border-slate-700 text-slate-300 text-xs font-mono">
-              <Radio className="w-3.5 h-3.5 text-cyan-400" />
-              <span>Simulated IP Traffic</span>
-            </div>
-
-            {/* Ingest mode: READ-ONLY */}
-            <div className="flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-mono font-bold tracking-wider">
-              <Lock className="w-3.5 h-3.5 text-blue-400" />
-              <span>READ-ONLY</span>
-            </div>
-
-            {/* Throughput: 1,250 flows/sec */}
-            <div className="flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300 text-xs font-mono font-semibold">
-              <span>{currentThroughput.toLocaleString()} flows/sec</span>
+              <span className="text-slate-600">•</span>
+              <span className="text-slate-400">Read-Only Tap</span>
+              <span className="text-slate-600">•</span>
+              <span className="font-mono text-slate-300">{currentThroughput.toLocaleString()} flows/s</span>
             </div>
           </div>
         </div>
 
         {/* Replay Controls, Scenario Selector & Clock */}
-        <div className="flex flex-wrap items-center gap-2.5">
+        <div className="flex flex-wrap items-center gap-2">
           {/* Scenario Selector */}
           <div className="relative flex items-center">
-            <label className="text-xs text-slate-400 mr-2 font-mono flex items-center gap-1">
-              <Sliders className="w-3.5 h-3.5 text-cyan-400" />
-              <span className="hidden sm:inline">Scenario:</span>
+            <label className="text-xs text-slate-400 mr-2 flex items-center gap-1">
+              <span>Scenario:</span>
             </label>
             <div className="relative">
               <select
                 value={currentScenario}
                 onChange={(e) => setScenario(e.target.value as ScenarioType)}
-                className="appearance-none bg-slate-900 border border-slate-700 hover:border-cyan-500/50 text-slate-200 text-xs font-mono rounded-lg pl-3 pr-8 py-1.5 focus:outline-none focus:ring-1 focus:ring-cyan-500 transition-colors cursor-pointer"
+                className="appearance-none bg-slate-800/90 border border-slate-700 hover:border-slate-600 text-slate-200 text-xs rounded px-2.5 pr-6 py-1 focus:outline-none focus:ring-1 focus:ring-slate-500 transition-colors cursor-pointer"
               >
                 {scenarios.map((sc) => (
                   <option key={sc} value={sc} className="bg-slate-900 text-slate-200">
@@ -124,19 +92,19 @@ export const Header: React.FC = () => {
                   </option>
                 ))}
               </select>
-              <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             </div>
           </div>
 
           {/* Speed Selector */}
-          <div className="flex items-center bg-slate-900 border border-slate-800 rounded-lg p-0.5">
+          <div className="flex items-center bg-slate-800/90 border border-slate-700 rounded p-0.5">
             {[1, 2, 5, 10].map((spd) => (
               <button
                 key={spd}
                 onClick={() => setSpeed(spd)}
-                className={`px-2 py-1 text-xs font-mono rounded transition-colors ${
+                className={`px-2 py-0.5 text-xs font-mono rounded transition-colors ${
                   replaySpeed === spd
-                    ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold'
+                    ? 'bg-slate-700 text-white font-medium shadow-sm'
                     : 'text-slate-400 hover:text-slate-200'
                 }`}
                 title={`Simulate at ${spd}x speed`}
@@ -147,11 +115,11 @@ export const Header: React.FC = () => {
           </div>
 
           {/* Start / Pause / Reset Controls */}
-          <div className="flex items-center space-x-1.5 bg-slate-900 border border-slate-800 rounded-lg p-1">
+          <div className="flex items-center space-x-1">
             {isReplayRunning ? (
               <button
                 onClick={pauseReplay}
-                className="flex items-center space-x-1 px-2.5 py-1 rounded bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-medium transition-colors"
+                className="flex items-center space-x-1 px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700 text-xs font-medium transition-colors"
                 title="Pause Replay"
               >
                 <Pause className="w-3.5 h-3.5" />
@@ -160,7 +128,7 @@ export const Header: React.FC = () => {
             ) : (
               <button
                 onClick={startReplay}
-                className="flex items-center space-x-1 px-2.5 py-1 rounded bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 text-xs font-medium transition-colors"
+                className="flex items-center space-x-1 px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-slate-700 text-xs font-medium transition-colors"
                 title="Start Replay"
               >
                 <Play className="w-3.5 h-3.5 fill-current" />
@@ -180,15 +148,15 @@ export const Header: React.FC = () => {
           {/* Schema Viewer Trigger */}
           <button
             onClick={() => setIsSchemaModalOpen(true)}
-            className="flex items-center space-x-1 px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-700 hover:border-cyan-500/50 text-slate-300 hover:text-cyan-300 text-xs font-mono transition-colors"
+            className="flex items-center space-x-1.5 px-2.5 py-1 rounded bg-slate-800/80 hover:bg-slate-750 border border-slate-700 text-slate-300 hover:text-white text-xs transition-colors"
             title="Inspect Standard Alert Schema"
           >
-            <FileCode2 className="w-3.5 h-3.5 text-cyan-400" />
+            <FileCode2 className="w-3.5 h-3.5 text-slate-400" />
             <span className="hidden sm:inline">Alert Schema</span>
           </button>
 
           {/* Real-time Clock */}
-          <div className="hidden xl:block pl-2 border-l border-slate-800 font-mono text-xs text-slate-400">
+          <div className="hidden xl:block pl-3 border-l border-slate-800 font-mono text-xs text-slate-400">
             {currentTime}
           </div>
         </div>

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {
   Search,
   ChevronRight,
-  Layers,
   ArrowUpDown,
 } from 'lucide-react';
 import { useSOC } from '../context/SOCContext';
@@ -37,14 +36,14 @@ export const AlertTable: React.FC = () => {
   const getSeverityBadge = (sev: string) => {
     switch (sev) {
       case 'critical':
-        return 'bg-red-500/20 text-red-300 border-red-500/50';
+        return 'text-rose-400 bg-rose-950/40 border-rose-800/50';
       case 'high':
-        return 'bg-orange-500/20 text-orange-300 border-orange-500/50';
+        return 'text-orange-400 bg-orange-950/40 border-orange-800/50';
       case 'medium':
-        return 'bg-amber-500/20 text-amber-300 border-amber-500/50';
+        return 'text-amber-400 bg-amber-950/40 border-amber-800/50';
       case 'low':
       default:
-        return 'bg-blue-500/20 text-blue-300 border-blue-500/50';
+        return 'text-slate-400 bg-slate-800/60 border-slate-700/50';
     }
   };
 
@@ -75,33 +74,28 @@ export const AlertTable: React.FC = () => {
   });
 
   return (
-    <div className="bg-[#0E1526]/90 border border-slate-800 rounded-xl p-4 flex flex-col shadow-xl">
+    <div className="bg-[#0D1117] border border-slate-800/80 rounded-lg p-4 flex flex-col">
       {/* Table Header & Controls */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b border-slate-800">
-        <div className="flex items-center space-x-2">
-          <div className="p-1.5 rounded-lg bg-cyan-500/10 text-cyan-400">
-            <Layers className="w-4 h-4" />
-          </div>
-          <div>
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-200">
-              Live Alert Telemetry Log
-            </h3>
-            <p className="text-[10px] text-slate-400">
-              Unidirectional detection stream matching standardized schema
-            </p>
-          </div>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b border-slate-800/80">
+        <div>
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-200">
+            Live Alert Telemetry Log
+          </h3>
+          <p className="text-[11px] text-slate-400">
+            Unidirectional detection stream matching standardized schema
+          </p>
         </div>
 
         {/* Search & Active Filters */}
         <div className="flex flex-wrap items-center gap-2">
           <div className="relative">
-            <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
+            <Search className="w-3.5 h-3.5 text-slate-500 absolute left-2.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder="Search IP, Flow ID, Class..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="bg-slate-900 border border-slate-700 text-slate-200 text-xs font-mono rounded-lg pl-8 pr-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-cyan-500 transition-all placeholder:text-slate-500 w-48 sm:w-60"
+              className="bg-[#090D18] border border-slate-800 hover:border-slate-700 text-slate-200 text-xs font-mono rounded-md pl-8 pr-3 py-1.5 focus:outline-none focus:border-slate-600 transition-colors placeholder:text-slate-600 w-48 sm:w-64"
             />
           </div>
 
@@ -112,7 +106,7 @@ export const AlertTable: React.FC = () => {
                 setFilterSeverity('ALL');
                 setSearchQuery('');
               }}
-              className="text-[11px] font-mono text-cyan-400 hover:text-cyan-300 px-2 py-1 rounded bg-cyan-950/40 border border-cyan-800"
+              className="text-[11px] text-slate-400 hover:text-slate-200 px-2.5 py-1 rounded bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 transition-colors"
             >
               Reset Filters
             </button>
@@ -121,18 +115,18 @@ export const AlertTable: React.FC = () => {
       </div>
 
       {/* Table Content */}
-      <div className="overflow-x-auto mt-3">
-        <table className="w-full text-left font-mono text-xs">
+      <div className="overflow-x-auto mt-2">
+        <table className="w-full text-left text-xs">
           <thead>
-            <tr className="border-b border-slate-800 text-[11px] text-slate-400 font-semibold uppercase tracking-wider bg-[#090D18]/80">
+            <tr className="border-b border-slate-800/80 text-[11px] text-slate-400 font-medium uppercase tracking-wider bg-slate-900/40">
               <th
-                className="py-2.5 px-3 cursor-pointer hover:text-slate-200"
+                className="py-2.5 px-3 cursor-pointer hover:text-slate-200 select-none"
                 onClick={() => {
                   setSortField('timestamp');
                   setSortAsc(!sortAsc);
                 }}
               >
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1.5">
                   <span>Timestamp</span>
                   <ArrowUpDown className="w-3 h-3 text-slate-500" />
                 </div>
@@ -143,25 +137,25 @@ export const AlertTable: React.FC = () => {
               <th className="py-2.5 px-3">Threat Class</th>
               <th className="py-2.5 px-3">Severity</th>
               <th
-                className="py-2.5 px-3 cursor-pointer hover:text-slate-200"
+                className="py-2.5 px-3 cursor-pointer hover:text-slate-200 select-none"
                 onClick={() => {
                   setSortField('confidence');
                   setSortAsc(!sortAsc);
                 }}
               >
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1.5">
                   <span>Confidence</span>
                   <ArrowUpDown className="w-3 h-3 text-slate-500" />
                 </div>
               </th>
-              <th className="py-2.5 px-3">Evidence</th>
+              <th className="py-2.5 px-3">Evidence Summary</th>
               <th className="py-2.5 px-2 text-right">Inspect</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-800/60">
+          <tbody className="divide-y divide-slate-800/60 font-mono">
             {sorted.length === 0 ? (
               <tr>
-                <td colSpan={9} className="py-8 text-center text-slate-500 text-xs">
+                <td colSpan={9} className="py-8 text-center text-slate-500 text-xs font-sans">
                   No alerts currently match the query filters.
                 </td>
               </tr>
@@ -174,37 +168,37 @@ export const AlertTable: React.FC = () => {
                   <tr
                     key={alert.id}
                     onClick={() => setSelectedAlert(alert)}
-                    className="hover:bg-[#131C31] transition-colors cursor-pointer group"
+                    className="hover:bg-slate-800/30 transition-colors cursor-pointer group"
                   >
                     {/* Timestamp */}
-                    <td className="py-2.5 px-3 text-slate-400 whitespace-nowrap">
+                    <td className="py-2.5 px-3 text-slate-400 whitespace-nowrap text-[11px]">
                       {formattedTime}
                     </td>
 
                     {/* Flow ID */}
-                    <td className="py-2.5 px-3 text-cyan-400 font-semibold whitespace-nowrap">
+                    <td className="py-2.5 px-3 text-slate-300 font-medium whitespace-nowrap text-[11px]">
                       {alert.flow_id}
                     </td>
 
                     {/* Source IP */}
-                    <td className="py-2.5 px-3 text-slate-200 whitespace-nowrap">
+                    <td className="py-2.5 px-3 text-slate-200 whitespace-nowrap text-[11px]">
                       {alert.src_ip}
                     </td>
 
                     {/* Destination IP */}
-                    <td className="py-2.5 px-3 text-slate-300 whitespace-nowrap">
+                    <td className="py-2.5 px-3 text-slate-300 whitespace-nowrap text-[11px]">
                       {alert.dst_ip}:{alert.dst_port}
                     </td>
 
                     {/* Threat Class */}
-                    <td className="py-2.5 px-3 whitespace-nowrap font-medium text-white group-hover:text-cyan-300">
+                    <td className="py-2.5 px-3 whitespace-nowrap font-sans font-medium text-slate-200 group-hover:text-sky-300 transition-colors">
                       {getThreatLabel(alert.threat_class)}
                     </td>
 
                     {/* Severity */}
                     <td className="py-2.5 px-3 whitespace-nowrap">
                       <span
-                        className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded border ${getSeverityBadge(
+                        className={`text-[10px] uppercase font-medium px-1.5 py-0.5 rounded border ${getSeverityBadge(
                           alert.severity
                         )}`}
                       >
@@ -213,18 +207,18 @@ export const AlertTable: React.FC = () => {
                     </td>
 
                     {/* Confidence */}
-                    <td className="py-2.5 px-3 whitespace-nowrap text-cyan-400 font-bold">
+                    <td className="py-2.5 px-3 whitespace-nowrap text-slate-200 font-medium text-[11px]">
                       {confPct}%
                     </td>
 
                     {/* Evidence */}
-                    <td className="py-2.5 px-3 text-slate-400 truncate max-w-xs">
+                    <td className="py-2.5 px-3 text-slate-400 truncate max-w-xs font-sans text-xs">
                       {alert.evidence.summary}
                     </td>
 
                     {/* Inspect Arrow */}
                     <td className="py-2.5 px-2 text-right">
-                      <ChevronRight className="w-4 h-4 text-slate-600 group-hover:text-cyan-400 inline-block transition-transform group-hover:translate-x-0.5" />
+                      <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-slate-300 inline-block transition-transform group-hover:translate-x-0.5" />
                     </td>
                   </tr>
                 );
@@ -234,9 +228,9 @@ export const AlertTable: React.FC = () => {
         </table>
       </div>
 
-      <div className="flex items-center justify-between pt-3 border-t border-slate-800/80 mt-2 text-[11px] font-mono text-slate-400">
+      <div className="flex items-center justify-between pt-3 border-t border-slate-800/80 mt-2 text-[11px] font-mono text-slate-500">
         <span>Showing top 50 buffered detections (Click row to inspect AI reasoning)</span>
-        <span className="text-cyan-400">{sorted.length} total matched alerts</span>
+        <span className="text-slate-400">{sorted.length} total matched alerts</span>
       </div>
     </div>
   );

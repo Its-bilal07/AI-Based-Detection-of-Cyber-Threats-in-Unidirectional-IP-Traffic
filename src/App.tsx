@@ -13,7 +13,7 @@ import { AlertSchemaModal } from './components/AlertSchemaModal';
 
 export const DashboardContent: React.FC = () => {
   return (
-    <div className="min-h-screen bg-[#080C15] text-slate-100 flex flex-col font-sans bg-cyber-grid">
+    <div className="min-h-screen bg-[#0B0F19] text-slate-100 flex flex-col font-sans">
       {/* Top Navigation & SOC Control Bar */}
       <Header />
 
@@ -46,13 +46,17 @@ export const DashboardContent: React.FC = () => {
       <AlertSchemaModal />
 
       {/* Footer */}
-      <footer className="border-t border-slate-800/80 bg-[#0E1526]/80 py-4 px-6 text-center text-xs font-mono text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2">
+      <footer className="border-t border-slate-800/80 bg-[#0D1117] py-3 px-6 text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2">
         <div className="flex items-center space-x-2">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span>AI-Based Threat Detection System | Unidirectional IP Traffic Inspection</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+          <span className="text-slate-400 font-medium">Unidirectional IP Traffic Threat Detection Console</span>
         </div>
-        <div>
-          <span>Ingest: 🔒 READ-ONLY | Decryption: NONE | Active Probing: DISABLED</span>
+        <div className="text-[11px] font-mono text-slate-500 flex items-center space-x-3">
+          <span>Ingest: Read-Only Tap</span>
+          <span>•</span>
+          <span>Payload Decryption: None</span>
+          <span>•</span>
+          <span>Active Probing: Disabled</span>
         </div>
       </footer>
     </div>
