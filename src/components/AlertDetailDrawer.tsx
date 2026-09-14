@@ -182,7 +182,7 @@ export const AlertDetailDrawer: React.FC = () => {
 
             {/* Horizontal Anomaly Bars */}
             <div className="space-y-2.5 pt-1">
-              {selectedAlert.evidence.feature_breakdown.map((feat, idx) => (
+              {(selectedAlert.evidence?.feature_breakdown || []).map((feat, idx) => (
                 <div key={idx} className="space-y-1">
                   <div className="flex justify-between items-center text-xs font-mono">
                     <span className="text-slate-300 font-sans text-xs">{feat.name}</span>

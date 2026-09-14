@@ -35,7 +35,7 @@ export const KPICards: React.FC = () => {
     },
     {
       title: 'Average Confidence',
-      value: `${averageConfidence}%`,
+      value: `${typeof averageConfidence === 'number' ? averageConfidence.toFixed(1) : averageConfidence}%`,
       valueColor: 'text-emerald-400',
       subtext: 'Model inference certainty',
       tag: 'Ensemble Score',
@@ -50,7 +50,7 @@ export const KPICards: React.FC = () => {
     },
     {
       title: 'Detection Latency',
-      value: `${detectionLatency}`,
+      value: `${typeof detectionLatency === 'number' ? Math.round(detectionLatency) : detectionLatency}`,
       unit: ' ms',
       valueColor: 'text-slate-200',
       subtext: 'Extraction + inference time',
