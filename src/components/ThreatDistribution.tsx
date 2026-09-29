@@ -43,17 +43,17 @@ export const ThreatDistribution: React.FC = () => {
   });
 
   return (
-    <div className="bg-[#0D1117] border border-slate-800/80 rounded-lg p-4 flex flex-col h-[340px]">
-      <div className="flex items-center justify-between pb-3 border-b border-slate-800/80">
+    <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-xs flex flex-col h-[340px]">
+      <div className="flex items-center justify-between pb-3 border-b border-slate-100">
         <div>
-          <h3 className="text-xs font-semibold text-slate-200 uppercase tracking-wider">
+          <h3 className="text-xs font-bold text-slate-700 uppercase tracking-wider">
             Threat Distribution
           </h3>
-          <p className="text-[11px] text-slate-400">
+          <p className="text-[11px] text-slate-500">
             Breakdown across detection vectors
           </p>
         </div>
-        <span className="text-xs font-mono text-slate-300">
+        <span className="text-xs font-mono text-slate-800 font-semibold">
           {totalAlerts} Total Alerts
         </span>
       </div>
@@ -67,7 +67,7 @@ export const ThreatDistribution: React.FC = () => {
               cy="80"
               r={radius}
               fill="transparent"
-              stroke="#1E293B"
+              stroke="#F1F5F9"
               strokeWidth={strokeWidth}
             />
             {slices.map((slice) => {
@@ -99,12 +99,12 @@ export const ThreatDistribution: React.FC = () => {
 
           {/* Center Label */}
           <div className="absolute flex flex-col items-center justify-center text-center pointer-events-none">
-            <span className="text-xl font-bold font-mono text-white">
+            <span className="text-2xl font-bold font-mono text-slate-900">
               {hoveredClass
                 ? `${slices.find((s) => s.id === hoveredClass)?.percentage}%`
                 : totalAlerts}
             </span>
-            <span className="text-[10px] uppercase text-slate-400 font-medium">
+            <span className="text-[10px] uppercase text-slate-500 font-semibold">
               {hoveredClass
                 ? slices.find((s) => s.id === hoveredClass)?.name
                 : 'Total'}
@@ -124,21 +124,21 @@ export const ThreatDistribution: React.FC = () => {
                 onClick={() =>
                   setFilterThreatClass(isSelected ? 'ALL' : cat.id)
                 }
-                className={`flex items-center justify-between py-1 px-1.5 rounded transition-colors cursor-pointer text-xs ${
+                className={`flex items-center justify-between py-1.5 px-2 rounded-md transition-colors cursor-pointer text-xs ${
                   isSelected
-                    ? 'bg-slate-800 text-white'
-                    : 'hover:bg-slate-800/40 text-slate-300'
+                    ? 'bg-blue-50 text-blue-900 font-medium border border-blue-200'
+                    : 'hover:bg-slate-50 text-slate-700'
                 }`}
               >
                 <div className="flex items-center space-x-2 truncate">
                   <span
-                    className="w-2 h-2 rounded-full shrink-0"
+                    className="w-2.5 h-2.5 rounded-full shrink-0"
                     style={{ backgroundColor: cat.color }}
                   />
                   <span className="truncate">{cat.name}</span>
                 </div>
                 <div className="flex items-center space-x-1.5 font-mono text-xs ml-2 shrink-0">
-                  <span className="font-semibold text-white">{cat.count}</span>
+                  <span className="font-semibold text-slate-900">{cat.count}</span>
                   <span className="text-[11px] text-slate-500">
                     ({cat.percentage}%)
                   </span>
