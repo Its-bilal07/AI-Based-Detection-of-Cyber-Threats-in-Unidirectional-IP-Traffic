@@ -13,7 +13,7 @@ import { AlertSchemaModal } from './components/AlertSchemaModal';
 
 export const DashboardContent: React.FC = () => {
   return (
-    <div className="min-h-screen bg-[#0B0F19] text-slate-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans">
       {/* Top Navigation & SOC Control Bar */}
       <Header />
 
@@ -46,10 +46,10 @@ export const DashboardContent: React.FC = () => {
       <AlertSchemaModal />
 
       {/* Footer */}
-      <footer className="border-t border-slate-800/80 bg-[#0D1117] py-3 px-6 text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2">
+      <footer className="border-t border-slate-200 bg-white py-3.5 px-6 text-xs text-slate-600 flex flex-col sm:flex-row items-center justify-between gap-2 shadow-xs">
         <div className="flex items-center space-x-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-          <span className="text-slate-400 font-medium">Unidirectional IP Traffic Threat Detection Console</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+          <span className="text-slate-700 font-medium">Unidirectional IP Traffic Threat Detection Console</span>
         </div>
         <div className="text-[11px] font-mono text-slate-500 flex items-center space-x-3">
           <span>Ingest: Read-Only Tap</span>

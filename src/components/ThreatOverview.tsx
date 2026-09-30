@@ -6,7 +6,9 @@ import {
   Lock,
   Radar,
   UploadCloud,
-  SlidersHorizontal
+  SlidersHorizontal,
+  CheckCircle2,
+  Clock
 } from 'lucide-react';
 import { useSOC } from '../context/SOCContext';
 import { ThreatClass } from '../types/alert';
@@ -14,20 +16,24 @@ import { ThreatClass } from '../types/alert';
 export const ThreatOverview: React.FC = () => {
   const { threatCounts, filterThreatClass, setFilterThreatClass, currentScenario } = useSOC();
 
+  const isDDoSActive = currentScenario === 'DDoS Attack' || currentScenario === 'Mixed Attack';
+
   const threatConfigs = [
     {
       id: 'DDoS_SYN_flood' as ThreatClass,
       title: 'Volumetric / Protocol DDoS',
       icon: Flame,
       severity: 'Critical',
-      status: currentScenario === 'DDoS Attack' || currentScenario === 'Mixed Attack' ? 'Attack Detected' : 'Monitoring',
-      isHot: currentScenario === 'DDoS Attack' || currentScenario === 'Mixed Attack',
+      isValidated: true,
+      statusBadge: isDDoSActive ? 'Attack Detected' : 'Monitoring Baseline',
+      isHot: isDDoSActive,
       confidence: '97%',
+      alertCount: threatCounts['DDoS_SYN_flood'] || 0,
       evidence: [
-        { label: 'SYN rate', value: '18,420/s' },
-        { label: 'Src IP entropy', value: '1.8' },
-        { label: 'Dst port', value: '443' },
-        { label: 'Confidence', value: '97%' },
+        { label: 'SYN packet rate', value: isDDoSActive ? '18,420/s' : 'Baseline (120/s)' },
+        { label: 'Src IP entropy', value: isDDoSActive ? '1.8 (Abnormal)' : '4.6 (Normal)' },
+        { label: 'Dst port focus', value: '443 (HTTPS)' },
+        { label: 'Model confidence', value: '97% (RF Ensemble)' },
       ],
     },
     {
@@ -35,76 +41,50 @@ export const ThreatOverview: React.FC = () => {
       title: 'Botnet C2 Beaconing',
       icon: Network,
       severity: 'Medium',
-      status: currentScenario === 'Botnet Beaconing' || currentScenario === 'Mixed Attack' ? 'Beacons Detected' : 'Monitoring',
-      isHot: currentScenario === 'Botnet Beaconing' || currentScenario === 'Mixed Attack',
-      confidence: '93%',
-      evidence: [
-        { label: 'Periodicity', value: '60s' },
-        { label: 'Repeated dst', value: '185.XX.XX.XX' },
-        { label: 'Variance', value: 'Low' },
-        { label: 'Confidence', value: '93%' },
-      ],
+      isValidated: false,
+      statusBadge: 'Roadmap Detector',
+      isHot: false,
+      plannedMethod: 'Periodic interval analysis and low-jitter variance evaluation across unidirectional flows.',
     },
     {
       id: 'DGA_domain' as ThreatClass,
       title: 'DGA / DNS Tunnelling',
       icon: Globe,
       severity: 'High',
-      status: currentScenario === 'DGA / DNS Tunnelling' || currentScenario === 'Mixed Attack' ? 'Anomalous Queries' : 'Monitoring',
-      isHot: currentScenario === 'DGA / DNS Tunnelling' || currentScenario === 'Mixed Attack',
-      confidence: '96%',
-      evidence: [
-        { label: 'Query entropy', value: '4.92' },
-        { label: 'Avg length', value: '47' },
-        { label: 'N-gram score', value: 'High' },
-        { label: 'Record type', value: 'TXT' },
-      ],
+      isValidated: false,
+      statusBadge: 'Roadmap Detector',
+      isHot: false,
+      plannedMethod: 'Character n-gram distribution, high-entropy query inspection, and anomalous TXT record analysis.',
     },
     {
       id: 'TLS_malware' as ThreatClass,
       title: 'Encrypted Session Malware',
       icon: Lock,
       severity: 'High',
-      status: currentScenario === 'Encrypted Malware' || currentScenario === 'Mixed Attack' ? 'JA4 Anomaly' : 'Monitoring',
-      isHot: currentScenario === 'Encrypted Malware' || currentScenario === 'Mixed Attack',
-      confidence: '91%',
-      encryptedNotice: 'Encrypted traffic analysed via metadata only. No payload decryption.',
-      evidence: [
-        { label: 'Fingerprint', value: 'Suspicious' },
-        { label: 'JA4 anomaly', value: 'High' },
-        { label: 'Seq anomaly', value: '0.87' },
-        { label: 'Timing', value: 'High' },
-      ],
+      isValidated: false,
+      statusBadge: 'Roadmap Detector',
+      isHot: false,
+      plannedMethod: 'Passive TLS metadata profiling and JA4 fingerprint anomalies without payload decryption.',
     },
     {
       id: 'port_scan' as ThreatClass,
       title: 'Reconnaissance / Port Scanning',
       icon: Radar,
       severity: 'High',
-      status: currentScenario === 'Port Scanning' || currentScenario === 'Mixed Attack' ? 'Fan-Out Detected' : 'Monitoring',
-      isHot: currentScenario === 'Port Scanning' || currentScenario === 'Mixed Attack',
-      confidence: '98%',
-      evidence: [
-        { label: 'Dst ports', value: '1,842' },
-        { label: 'Target hosts', value: '324' },
-        { label: 'Fan-out rate', value: 'High' },
-        { label: 'Confidence', value: '98%' },
-      ],
+      isValidated: false,
+      statusBadge: 'Roadmap Detector',
+      isHot: false,
+      plannedMethod: 'Horizontal and vertical destination port fan-out rate and SYN/FIN sweep detection.',
     },
     {
       id: 'data_exfil' as ThreatClass,
       title: 'Data Exfiltration',
       icon: UploadCloud,
       severity: 'High',
-      status: currentScenario === 'Data Exfiltration' || currentScenario === 'Mixed Attack' ? 'Egress Burst' : 'Monitoring',
-      isHot: currentScenario === 'Data Exfiltration' || currentScenario === 'Mixed Attack',
-      confidence: '95%',
-      evidence: [
-        { label: 'Outbound bytes', value: '842 MB' },
-        { label: 'Inbound bytes', value: '21 MB' },
-        { label: 'Out/In ratio', value: '40.1' },
-        { label: 'Duration', value: '18 min' },
-      ],
+      isValidated: false,
+      statusBadge: 'Roadmap Detector',
+      isHot: false,
+      plannedMethod: 'Directional volumetric flow asymmetry and cumulative egress-to-ingress ratio tracking.',
     },
   ];
 
@@ -112,101 +92,121 @@ export const ThreatOverview: React.FC = () => {
     <section className="space-y-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
-          <SlidersHorizontal className="w-4 h-4 text-slate-400" />
-          <h2 className="text-xs font-semibold uppercase tracking-wider text-slate-300">
+          <SlidersHorizontal className="w-4 h-4 text-slate-500" />
+          <h2 className="text-xs font-bold uppercase tracking-wider text-slate-700">
             Threat Classification Vectors (Unidirectional Traffic Models)
           </h2>
         </div>
         {filterThreatClass !== 'ALL' && (
           <button
             onClick={() => setFilterThreatClass('ALL')}
-            className="text-xs text-slate-300 hover:text-white flex items-center gap-1 bg-slate-800 px-2.5 py-1 rounded border border-slate-700 transition-colors"
+            className="text-xs text-blue-700 hover:text-blue-900 flex items-center gap-1 bg-blue-50 hover:bg-blue-100 px-2.5 py-1 rounded-md border border-blue-200 transition-colors font-medium"
           >
             Clear Filter ({filterThreatClass})
           </button>
         )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
         {threatConfigs.map((threat) => {
           const Icon = threat.icon;
           const isSelected = filterThreatClass === threat.id;
-          const count = threatCounts[threat.id] || 0;
 
           return (
             <div
               key={threat.id}
-              onClick={() =>
-                setFilterThreatClass(isSelected ? 'ALL' : threat.id)
-              }
-              className={`relative rounded-lg p-4 border transition-colors cursor-pointer flex flex-col justify-between ${
+              onClick={() => setFilterThreatClass(isSelected ? 'ALL' : threat.id)}
+              className={`relative rounded-lg p-4 border transition-all cursor-pointer flex flex-col justify-between shadow-xs ${
                 isSelected
-                  ? 'border-slate-500 bg-[#161F30] ring-1 ring-slate-400/30'
+                  ? 'border-blue-500 bg-blue-50/30 ring-1 ring-blue-500'
                   : threat.isHot
-                  ? 'border-red-900/60 bg-[#141A26] hover:border-red-800/80'
-                  : 'border-slate-800/80 bg-[#0D1117] hover:border-slate-700'
+                  ? 'border-rose-300 bg-rose-50/30 hover:border-rose-400'
+                  : 'border-slate-200 bg-white hover:border-slate-300'
               }`}
             >
               {/* Header */}
               <div>
                 <div className="flex items-start justify-between gap-2 mb-2">
                   <div className="flex items-center space-x-2.5">
-                    <Icon className={`w-4 h-4 shrink-0 ${threat.isHot ? 'text-red-400' : 'text-slate-400'}`} />
+                    <div
+                      className={`p-1.5 rounded-md ${
+                        threat.isHot
+                          ? 'bg-rose-100 text-rose-700'
+                          : threat.isValidated
+                          ? 'bg-blue-50 text-blue-700'
+                          : 'bg-slate-100 text-slate-600'
+                      }`}
+                    >
+                      <Icon className="w-4 h-4 shrink-0" />
+                    </div>
                     <div>
-                      <h3 className="text-sm font-medium text-slate-100 tracking-tight">
+                      <h3 className="text-sm font-semibold text-slate-900 tracking-tight">
                         {threat.title}
                       </h3>
-                      <div className="flex items-center space-x-2 text-xs text-slate-400 mt-0.5">
-                        <span className={threat.isHot ? 'text-red-300 font-medium' : 'text-slate-400'}>
-                          {threat.severity}
+                      <div className="flex items-center space-x-2 text-xs text-slate-500 mt-0.5">
+                        <span className={threat.isHot ? 'text-rose-700 font-semibold' : 'text-slate-600'}>
+                          {threat.severity} Severity
                         </span>
                         <span>•</span>
-                        <span className="font-mono text-slate-300">{count} alerts</span>
+                        {threat.isValidated ? (
+                          <span className="font-mono text-slate-800 font-medium">{threat.alertCount} alerts</span>
+                        ) : (
+                          <span className="text-slate-500 italic">Planned</span>
+                        )}
                       </div>
                     </div>
                   </div>
 
-                  {/* Status Indicator */}
-                  {threat.isHot ? (
-                    <span className="inline-flex items-center gap-1.5 text-xs font-medium text-red-400 bg-red-950/40 border border-red-900/50 px-2 py-0.5 rounded">
-                      <span className="w-1.5 h-1.5 rounded-full bg-red-400 inline-block"></span>
-                      {threat.status}
+                  {/* Implementation Status Badge */}
+                  {threat.isValidated ? (
+                    <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">
+                      <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                      VALIDATED IN PROTOTYPE
                     </span>
                   ) : (
-                    <span className="text-xs text-slate-400 font-normal">
-                      Baseline
+                    <span className="inline-flex items-center gap-1 text-[10px] font-medium text-slate-600 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded">
+                      <Clock className="w-3 h-3 text-slate-400" />
+                      PLANNED DETECTOR
                     </span>
                   )}
                 </div>
 
-                {/* Evidence Key-Value List */}
-                <div className="mt-3 pt-2.5 border-t border-slate-800/70">
-                  <div className="flex items-center justify-between text-xs text-slate-400 mb-1.5">
-                    <span>Evidence Attribution</span>
-                    <span className="font-mono text-slate-300 text-[11px]">Conf: {threat.confidence}</span>
-                  </div>
-                  <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-xs">
-                    {threat.evidence.map((ev, idx) => (
-                      <div key={idx} className="flex justify-between items-baseline py-0.5 border-b border-slate-800/40">
-                        <span className="text-slate-400 truncate text-[11px]">{ev.label}</span>
-                        <span className="font-mono text-slate-200 text-[11px]">{ev.value}</span>
+                {/* Evidence or Specification Section */}
+                <div className="mt-3 pt-2.5 border-t border-slate-100">
+                  {threat.isValidated ? (
+                    <div>
+                      <div className="flex items-center justify-between text-xs text-slate-600 mb-1.5 font-medium">
+                        <span>Feature Attribution</span>
+                        <span className="font-mono text-slate-800 text-[11px] font-semibold">
+                          Confidence: {threat.confidence}
+                        </span>
                       </div>
-                    ))}
-                  </div>
+                      <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-xs">
+                        {threat.evidence?.map((ev, idx) => (
+                          <div key={idx} className="flex justify-between items-baseline py-0.5 border-b border-slate-100">
+                            <span className="text-slate-500 truncate text-[11px]">{ev.label}</span>
+                            <span className="font-mono text-slate-800 text-[11px] font-medium">{ev.value}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="space-y-1">
+                      <span className="text-[11px] font-semibold text-slate-600 uppercase tracking-wider block">
+                        Architecture Specification
+                      </span>
+                      <p className="text-[11px] text-slate-600 leading-relaxed font-sans">
+                        {threat.plannedMethod}
+                      </p>
+                    </div>
+                  )}
                 </div>
-
-                {/* TLS Disclaimer */}
-                {threat.encryptedNotice && (
-                  <div className="mt-2.5 pt-2 border-t border-slate-800/60 text-[11px] text-slate-400 leading-snug">
-                    {threat.encryptedNotice}
-                  </div>
-                )}
               </div>
 
-              {/* Click to filter footer */}
-              <div className="mt-3 pt-2 border-t border-slate-800/60 flex items-center justify-between text-xs text-slate-400">
-                <span>{isSelected ? 'Active filter' : 'Filter table'}</span>
-                <span className="text-slate-400 hover:text-white transition-colors">→</span>
+              {/* Card Footer */}
+              <div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                <span className="font-medium">{isSelected ? 'Active Filter' : 'Filter Telemetry'}</span>
+                <span className="text-slate-400 group-hover:text-blue-600 font-semibold">→</span>
               </div>
             </div>
           );
