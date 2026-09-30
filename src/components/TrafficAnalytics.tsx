@@ -85,17 +85,17 @@ export const TrafficAnalytics: React.FC = () => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
       {/* 1. Flows/sec over time */}
-      <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-xs flex flex-col justify-between">
-        <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+      <div className="bg-white dark:bg-soc-card border border-slate-200 dark:border-soc-border rounded-lg p-4 shadow-xs flex flex-col justify-between transition-colors duration-200">
+        <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-soc-border">
           <div>
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
               Flows/sec Over Time
             </h3>
-            <p className="text-[11px] text-slate-500">
+            <p className="text-[11px] text-slate-500 dark:text-slate-400">
               Instantaneous ingress flow rate
             </p>
           </div>
-          <span className="text-sm font-mono font-bold text-blue-700">
+          <span className="text-sm font-mono font-bold text-blue-700 dark:text-blue-400">
             {Math.round(latest.flows_per_sec).toLocaleString()} /s
           </span>
         </div>
@@ -109,14 +109,14 @@ export const TrafficAnalytics: React.FC = () => {
           >
             <defs>
               <linearGradient id="flowsGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#2563EB" stopOpacity="0.12" />
+                <stop offset="0%" stopColor="#2563EB" stopOpacity="0.18" />
                 <stop offset="100%" stopColor="#2563EB" stopOpacity="0.0" />
               </linearGradient>
             </defs>
             {/* Grid horizontal lines */}
-            <line x1="0" y1="25" x2="280" y2="25" stroke="#F1F5F9" strokeDasharray="3 3" />
-            <line x1="0" y1="50" x2="280" y2="50" stroke="#F1F5F9" strokeDasharray="3 3" />
-            <line x1="0" y1="75" x2="280" y2="75" stroke="#F1F5F9" strokeDasharray="3 3" />
+            <line x1="0" y1="25" x2="280" y2="25" stroke="#F1F5F9" className="stroke-slate-100 dark:stroke-slate-800/80" strokeDasharray="3 3" />
+            <line x1="0" y1="50" x2="280" y2="50" stroke="#F1F5F9" className="stroke-slate-100 dark:stroke-slate-800/80" strokeDasharray="3 3" />
+            <line x1="0" y1="75" x2="280" y2="75" stroke="#F1F5F9" className="stroke-slate-100 dark:stroke-slate-800/80" strokeDasharray="3 3" />
 
             {flowsArea && <path d={flowsArea} fill="url(#flowsGrad)" />}
             {flowsLine && (
@@ -124,6 +124,7 @@ export const TrafficAnalytics: React.FC = () => {
                 d={flowsLine}
                 fill="none"
                 stroke="#2563EB"
+                className="stroke-blue-600 dark:stroke-blue-400"
                 strokeWidth="1.75"
                 strokeLinecap="round"
               />
@@ -131,28 +132,28 @@ export const TrafficAnalytics: React.FC = () => {
           </svg>
         </div>
 
-        <div className="flex justify-between items-center text-[10px] font-mono text-slate-500 pt-2.5 border-t border-slate-100">
+        <div className="flex justify-between items-center text-[10px] font-mono text-slate-500 dark:text-slate-400 pt-2.5 border-t border-slate-100 dark:border-soc-border">
           <span>T - 60s</span>
-          <span className="text-slate-500 font-medium">Line Rate Tracking</span>
+          <span className="text-slate-500 dark:text-slate-400 font-medium">Line Rate Tracking</span>
           <span>Live (Now)</span>
         </div>
       </div>
 
       {/* 2. Inbound vs Outbound Bytes */}
-      <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-xs flex flex-col justify-between">
-        <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+      <div className="bg-white dark:bg-soc-card border border-slate-200 dark:border-soc-border rounded-lg p-4 shadow-xs flex flex-col justify-between transition-colors duration-200">
+        <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-soc-border">
           <div>
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
               Inbound vs Outbound Bytes
             </h3>
-            <p className="text-[11px] text-slate-500">
+            <p className="text-[11px] text-slate-500 dark:text-slate-400">
               Directional volume & exfiltration index
             </p>
           </div>
           <div className="flex items-center space-x-2 text-xs font-mono">
-            <span className="text-blue-700 font-semibold">IN {Number(latest.inbound_bytes_mbps).toFixed(1)} MB/s</span>
-            <span className="text-slate-300">•</span>
-            <span className="text-emerald-700 font-semibold">OUT {Number(latest.outbound_bytes_mbps).toFixed(1)} MB/s</span>
+            <span className="text-blue-700 dark:text-blue-400 font-semibold">IN {Number(latest.inbound_bytes_mbps).toFixed(1)} MB/s</span>
+            <span className="text-slate-300 dark:text-slate-600">•</span>
+            <span className="text-emerald-700 dark:text-emerald-400 font-semibold">OUT {Number(latest.outbound_bytes_mbps).toFixed(1)} MB/s</span>
           </div>
         </div>
 
@@ -165,15 +166,15 @@ export const TrafficAnalytics: React.FC = () => {
           >
             <defs>
               <linearGradient id="inGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#2563EB" stopOpacity="0.08" />
+                <stop offset="0%" stopColor="#2563EB" stopOpacity="0.15" />
                 <stop offset="100%" stopColor="#2563EB" stopOpacity="0.0" />
               </linearGradient>
               <linearGradient id="outGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#059669" stopOpacity="0.08" />
+                <stop offset="0%" stopColor="#059669" stopOpacity="0.15" />
                 <stop offset="100%" stopColor="#059669" stopOpacity="0.0" />
               </linearGradient>
             </defs>
-            <line x1="0" y1="50" x2="280" y2="50" stroke="#F1F5F9" strokeDasharray="3 3" />
+            <line x1="0" y1="50" x2="280" y2="50" stroke="#F1F5F9" className="stroke-slate-100 dark:stroke-slate-800/80" strokeDasharray="3 3" />
 
             {inArea && <path d={inArea} fill="url(#inGrad)" />}
             {outArea && <path d={outArea} fill="url(#outGrad)" />}
@@ -182,6 +183,7 @@ export const TrafficAnalytics: React.FC = () => {
                 d={inLine}
                 fill="none"
                 stroke="#2563EB"
+                className="stroke-blue-600 dark:stroke-blue-400"
                 strokeWidth="1.5"
                 strokeDasharray="4 2"
               />
@@ -191,6 +193,7 @@ export const TrafficAnalytics: React.FC = () => {
                 d={outLine}
                 fill="none"
                 stroke="#059669"
+                className="stroke-emerald-600 dark:stroke-emerald-400"
                 strokeWidth="1.75"
                 strokeLinecap="round"
               />
@@ -198,29 +201,29 @@ export const TrafficAnalytics: React.FC = () => {
           </svg>
         </div>
 
-        <div className="flex justify-between items-center text-[10px] font-mono text-slate-500 pt-2.5 border-t border-slate-100">
-          <span className="flex items-center gap-1.5 text-blue-700 font-medium">
-            <span className="w-2.5 h-0.5 bg-blue-600 inline-block rounded-full"></span> Ingress
+        <div className="flex justify-between items-center text-[10px] font-mono text-slate-500 dark:text-slate-400 pt-2.5 border-t border-slate-100 dark:border-soc-border">
+          <span className="flex items-center gap-1.5 text-blue-700 dark:text-blue-400 font-medium">
+            <span className="w-2.5 h-0.5 bg-blue-600 dark:bg-blue-400 inline-block rounded-full"></span> Ingress
           </span>
-          <span className="flex items-center gap-1.5 text-emerald-700 font-medium">
-            <span className="w-2.5 h-0.5 bg-emerald-600 inline-block rounded-full"></span> Egress (Exfil)
+          <span className="flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400 font-medium">
+            <span className="w-2.5 h-0.5 bg-emerald-600 dark:bg-emerald-400 inline-block rounded-full"></span> Egress (Exfil)
           </span>
-          <span className="text-slate-600 font-semibold">Ratio {(latest.outbound_bytes_mbps / (latest.inbound_bytes_mbps || 1)).toFixed(2)}:1</span>
+          <span className="text-slate-600 dark:text-slate-300 font-semibold">Ratio {(latest.outbound_bytes_mbps / (latest.inbound_bytes_mbps || 1)).toFixed(2)}:1</span>
         </div>
       </div>
 
       {/* 3. Threat Detection Rate over time */}
-      <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-xs flex flex-col justify-between">
-        <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+      <div className="bg-white dark:bg-soc-card border border-slate-200 dark:border-soc-border rounded-lg p-4 shadow-xs flex flex-col justify-between transition-colors duration-200">
+        <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-soc-border">
           <div>
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
               Threat Detection Rate
             </h3>
-            <p className="text-[11px] text-slate-500">
+            <p className="text-[11px] text-slate-500 dark:text-slate-400">
               Classified anomalies per minute
             </p>
           </div>
-          <span className="text-sm font-mono font-bold text-rose-600">
+          <span className="text-sm font-mono font-bold text-rose-600 dark:text-rose-400">
             {Math.round(latest.detection_rate_per_min)} alerts/min
           </span>
         </div>
@@ -234,13 +237,13 @@ export const TrafficAnalytics: React.FC = () => {
           >
             <defs>
               <linearGradient id="rateGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#DC2626" stopOpacity="0.10" />
+                <stop offset="0%" stopColor="#DC2626" stopOpacity="0.15" />
                 <stop offset="100%" stopColor="#DC2626" stopOpacity="0.0" />
               </linearGradient>
             </defs>
-            <line x1="0" y1="25" x2="280" y2="25" stroke="#F1F5F9" strokeDasharray="3 3" />
-            <line x1="0" y1="50" x2="280" y2="50" stroke="#F1F5F9" strokeDasharray="3 3" />
-            <line x1="0" y1="75" x2="280" y2="75" stroke="#F1F5F9" strokeDasharray="3 3" />
+            <line x1="0" y1="25" x2="280" y2="25" stroke="#F1F5F9" className="stroke-slate-100 dark:stroke-slate-800/80" strokeDasharray="3 3" />
+            <line x1="0" y1="50" x2="280" y2="50" stroke="#F1F5F9" className="stroke-slate-100 dark:stroke-slate-800/80" strokeDasharray="3 3" />
+            <line x1="0" y1="75" x2="280" y2="75" stroke="#F1F5F9" className="stroke-slate-100 dark:stroke-slate-800/80" strokeDasharray="3 3" />
 
             {rateArea && <path d={rateArea} fill="url(#rateGrad)" />}
             {rateLine && (
@@ -248,6 +251,7 @@ export const TrafficAnalytics: React.FC = () => {
                 d={rateLine}
                 fill="none"
                 stroke="#DC2626"
+                className="stroke-rose-600 dark:stroke-rose-400"
                 strokeWidth="1.75"
                 strokeLinecap="round"
               />
@@ -255,9 +259,9 @@ export const TrafficAnalytics: React.FC = () => {
           </svg>
         </div>
 
-        <div className="flex justify-between items-center text-[10px] font-mono text-slate-500 pt-2.5 border-t border-slate-100">
+        <div className="flex justify-between items-center text-[10px] font-mono text-slate-500 dark:text-slate-400 pt-2.5 border-t border-slate-100 dark:border-soc-border">
           <span>T - 60s</span>
-          <span className="text-slate-500 font-medium">Model Inference Window</span>
+          <span className="text-slate-500 dark:text-slate-400 font-medium">Model Inference Window</span>
           <span>Live</span>
         </div>
       </div>

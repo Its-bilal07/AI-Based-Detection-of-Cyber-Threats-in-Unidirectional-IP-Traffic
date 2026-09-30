@@ -24,20 +24,20 @@ export const ArchitecturePanel: React.FC = () => {
   ];
 
   return (
-    <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-xs">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b border-slate-100">
+    <div className="bg-white dark:bg-soc-card border border-slate-200 dark:border-soc-border rounded-lg p-4 shadow-xs transition-colors duration-200">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-soc-border">
         <div>
-          <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700">
+          <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
             Unidirectional Pipeline Architecture & Passive Ingest Verification
           </h3>
-          <p className="text-[11px] text-slate-500 mt-0.5">
+          <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
             Strict read-only network monitoring pipeline: zero reverse channel capability
           </p>
         </div>
 
         {/* One-Way Lock Tag */}
-        <div className="flex items-center space-x-1.5 px-2.5 py-1 rounded-md bg-blue-50 border border-blue-200 text-blue-700 font-mono text-xs font-semibold self-start md:self-auto">
-          <Lock className="w-3.5 h-3.5 text-blue-600" />
+        <div className="flex items-center space-x-1.5 px-2.5 py-1 rounded-md bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 font-mono text-xs font-semibold self-start md:self-auto">
+          <Lock className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
           <span>ONE-WAY / READ-ONLY INGEST</span>
         </div>
       </div>
@@ -51,22 +51,22 @@ export const ArchitecturePanel: React.FC = () => {
               <div
                 className={`w-full p-2.5 rounded-lg border flex flex-col items-center justify-center transition-colors min-h-[110px] ${
                   step.isKey
-                    ? 'bg-blue-50/80 border-blue-200 text-blue-900 shadow-2xs'
-                    : 'bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300'
+                    ? 'bg-blue-50/80 dark:bg-blue-950/50 border-blue-200 dark:border-blue-800 text-blue-900 dark:text-blue-200 shadow-2xs'
+                    : 'bg-slate-50 dark:bg-soc-surface border-slate-200 dark:border-soc-border text-slate-700 dark:text-slate-300 hover:border-slate-300 dark:hover:border-soc-borderHover'
                 }`}
               >
-                <Icon className={`w-4 h-4 mb-2 ${step.isKey ? 'text-blue-600' : 'text-slate-500'}`} />
-                <span className="text-xs font-semibold text-slate-900 leading-tight line-clamp-2">
+                <Icon className={`w-4 h-4 mb-2 ${step.isKey ? 'text-blue-600 dark:text-blue-400' : 'text-slate-500 dark:text-slate-400'}`} />
+                <span className="text-xs font-semibold text-slate-900 dark:text-white leading-tight line-clamp-2">
                   {step.label}
                 </span>
-                <span className="text-[10px] text-slate-500 mt-1 font-mono line-clamp-2">
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 mt-1 font-mono line-clamp-2">
                   {step.desc}
                 </span>
               </div>
 
               {/* Arrow separator (hidden on last step) */}
               {idx < pipelineSteps.length - 1 && (
-                <div className="hidden lg:block absolute -right-2 top-1/2 -translate-y-1/2 z-10 text-slate-300">
+                <div className="hidden lg:block absolute -right-2 top-1/2 -translate-y-1/2 z-10 text-slate-300 dark:text-slate-600">
                   <ArrowRight className="w-3 h-3" />
                 </div>
               )}
@@ -76,7 +76,7 @@ export const ArchitecturePanel: React.FC = () => {
       </div>
 
       {/* Security & Architectural Guarantees */}
-      <div className="mt-4 pt-3.5 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+      <div className="mt-4 pt-3.5 border-t border-slate-100 dark:border-soc-border grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
         {[
           { label: 'No return path', desc: 'Physical data diode / one-way optical tap topology' },
           { label: 'No active probing', desc: 'Zero ICMP/TCP pinging or port probing injected' },
@@ -85,14 +85,14 @@ export const ArchitecturePanel: React.FC = () => {
         ].map((item, idx) => (
           <div
             key={idx}
-            className="flex items-start space-x-2.5 p-2.5 rounded-lg bg-slate-50 border border-slate-200"
+            className="flex items-start space-x-2.5 p-2.5 rounded-lg bg-slate-50 dark:bg-soc-surface border border-slate-200 dark:border-soc-border"
           >
-            <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+            <CheckCircle className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
             <div>
-              <span className="text-xs font-mono font-bold text-slate-800 block">
+              <span className="text-xs font-mono font-bold text-slate-800 dark:text-slate-200 block">
                 {item.label}
               </span>
-              <span className="text-[11px] text-slate-500 leading-tight block mt-0.5">
+              <span className="text-[11px] text-slate-500 dark:text-slate-400 leading-tight block mt-0.5">
                 {item.desc}
               </span>
             </div>

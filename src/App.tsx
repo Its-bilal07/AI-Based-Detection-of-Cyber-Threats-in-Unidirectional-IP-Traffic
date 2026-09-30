@@ -1,5 +1,6 @@
 import React from 'react';
 import { SOCProvider } from './context/SOCContext';
+import { ThemeProvider } from './context/ThemeContext';
 import { Header } from './components/Header';
 import { KPICards } from './components/KPICards';
 import { ThreatOverview } from './components/ThreatOverview';
@@ -13,7 +14,7 @@ import { AlertSchemaModal } from './components/AlertSchemaModal';
 
 export const DashboardContent: React.FC = () => {
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans">
+    <div className="min-h-screen bg-slate-50 dark:bg-soc-bg text-slate-900 dark:text-slate-100 flex flex-col font-sans transition-colors duration-200">
       {/* Top Navigation & SOC Control Bar */}
       <Header />
 
@@ -46,12 +47,12 @@ export const DashboardContent: React.FC = () => {
       <AlertSchemaModal />
 
       {/* Footer */}
-      <footer className="border-t border-slate-200 bg-white py-3.5 px-6 text-xs text-slate-600 flex flex-col sm:flex-row items-center justify-between gap-2 shadow-xs">
+      <footer className="border-t border-slate-200 dark:border-soc-border bg-white dark:bg-soc-surface py-3.5 px-6 text-xs text-slate-600 dark:text-slate-400 flex flex-col sm:flex-row items-center justify-between gap-2 shadow-xs transition-colors duration-200">
         <div className="flex items-center space-x-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-          <span className="text-slate-700 font-medium">Unidirectional IP Traffic Threat Detection Console</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span className="text-slate-700 dark:text-slate-300 font-medium">Unidirectional IP Traffic Threat Detection Console</span>
         </div>
-        <div className="text-[11px] font-mono text-slate-500 flex items-center space-x-3">
+        <div className="text-[11px] font-mono text-slate-500 dark:text-slate-400 flex items-center space-x-3">
           <span>Ingest: Read-Only Tap</span>
           <span>•</span>
           <span>Payload Decryption: None</span>
@@ -65,9 +66,11 @@ export const DashboardContent: React.FC = () => {
 
 export const App: React.FC = () => {
   return (
-    <SOCProvider>
-      <DashboardContent />
-    </SOCProvider>
+    <ThemeProvider>
+      <SOCProvider>
+        <DashboardContent />
+      </SOCProvider>
+    </ThemeProvider>
   );
 };
 
