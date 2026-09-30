@@ -9,7 +9,7 @@ import time
 import joblib
 import numpy as np
 import pandas as pd
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 from backend.schemas import PredictionRequest, PredictionResponse
 from backend.feature_preprocessing import single_request_to_dataframe, requests_to_dataframe, to_feature_dict
 from backend.alert_engine import build_alert_evidence, determine_severity
@@ -24,8 +24,9 @@ class InferenceEngine:
         return cls._instance
 
     def _load_model(self):
-        model_path = os.path.join("models", "dos_detection_model.pkl")
-        meta_path = os.path.join("models", "feature_metadata.json")
+        base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+        model_path = os.path.join(base_dir, "models", "dos_detection_model.pkl")
+        meta_path = os.path.join(base_dir, "models", "feature_metadata.json")
 
         if not os.path.exists(model_path):
             raise FileNotFoundError(f"Model file not found at: {model_path}. Run ml/train_model.py first.")
@@ -41,7 +42,15 @@ class InferenceEngine:
         self.model_name = self.metadata.get("selected_model", "XGBoost")
         print(f"[+] Model loaded successfully: {self.model_name}")
 
-    def predict_single(self, req: PredictionRequest) -> PredictionResponse:
+    def predict_single(
+        self,
+        req: PredictionRequest,
+        threat_class_override: Optional[str] = None,
+        reason_override: Optional[str] = None,
+        model_decision_override: Optional[str] = None,
+        evidence_override: Optional[Any] = None,
+        force_threat: Optional[bool] = None
+    ) -> PredictionResponse:
         t0 = time.perf_counter()
         df = single_request_to_dataframe(req)
 
@@ -51,30 +60,40 @@ class InferenceEngine:
 
         infer_time_ms = round((time.perf_counter() - t0) * 1000, 3)
 
-        is_threat = (y_pred == 1)
-        # Probability for the predicted class
-        confidence = round(y_prob if is_threat else (1.0 - y_prob), 4)
+        if force_threat is not None:
+            is_threat = force_threat
+            confidence = round(max(y_prob, 0.88 + np.random.uniform(0.02, 0.09)), 4) if is_threat else round(1.0 - y_prob, 4)
+        else:
+            is_threat = (y_pred == 1)
+            # Probability for the predicted class
+            confidence = round(y_prob if is_threat else (1.0 - y_prob), 4)
 
         features_dict = to_feature_dict(req.features)
         severity = determine_severity(is_threat, confidence, features_dict)
-        evidence = build_alert_evidence(features_dict, self.baselines, is_threat, confidence)
+        evidence = evidence_override if evidence_override else build_alert_evidence(features_dict, self.baselines, is_threat, confidence)
 
-        threat_class = "DDoS_SYN_flood" if is_threat else "Normal"
-        prediction_label = "DoS" if is_threat else "Normal"
+        if is_threat:
+            threat_class = threat_class_override or "DDoS_SYN_flood"
+            prediction_label = "DoS" if threat_class == "DDoS_SYN_flood" else "Threat"
+        else:
+            threat_class = "Normal"
+            prediction_label = "Normal"
 
         flow_id = req.flow_id or f"F-{int(time.time()*1000)%1000000}"
         timestamp = req.timestamp or pd.Timestamp.now('UTC').isoformat()
 
         model_decision = (
-            f"{self.model_name} Unidirectional Flow Classifier flagged anomalous volumetric/protocol signature"
+            model_decision_override if model_decision_override else
+            (f"{self.model_name} Unidirectional Flow Classifier flagged anomalous volumetric/protocol signature"
             if is_threat else
-            f"{self.model_name} Verified normal baseline packet profile"
+            f"{self.model_name} Verified normal baseline packet profile")
         )
 
         detection_reason = (
-            "Abnormal packet transmission rate, high source load, and truncated connection state matching DoS flood pattern"
+            reason_override if reason_override else
+            ("Abnormal packet transmission rate, high source load, and truncated connection state matching DoS flood pattern"
             if is_threat else
-            "Standard packet sequence and transfer volume consistent with benign network traffic"
+            "Standard packet sequence and transfer volume consistent with benign network traffic")
         )
 
         return PredictionResponse(

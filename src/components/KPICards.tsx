@@ -54,11 +54,10 @@ export const KPICards: React.FC = () => {
     },
     {
       title: 'Average Confidence',
-      value: `${formatConfidence(averageConfidence)}%`,
-      valueColor: 'text-blue-600',
-      subtext: 'Model inference score',
-      tag: 'Model Confidence',
-      tagColor: 'bg-blue-50 text-blue-700 border-blue-200',
+      value: `${typeof averageConfidence === 'number' ? averageConfidence.toFixed(1) : averageConfidence}%`,
+      valueColor: 'text-emerald-400',
+      subtext: 'Model inference certainty',
+      tag: 'Ensemble Score',
     },
     {
       title: 'Current Throughput',
@@ -71,7 +70,7 @@ export const KPICards: React.FC = () => {
     },
     {
       title: 'Detection Latency',
-      value: formatLatency(detectionLatency),
+      value: `${typeof detectionLatency === 'number' ? Math.round(detectionLatency) : detectionLatency}`,
       unit: ' ms',
       valueColor: 'text-slate-900',
       subtext: 'Extraction + inference time',

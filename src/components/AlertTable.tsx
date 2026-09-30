@@ -55,10 +55,10 @@ export const AlertTable: React.FC = () => {
       filterSeverity === 'ALL' || a.severity === filterSeverity;
     const matchesSearch =
       searchQuery.trim() === '' ||
-      a.src_ip.includes(searchQuery) ||
-      a.dst_ip.includes(searchQuery) ||
-      a.flow_id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      a.threat_class.toLowerCase().includes(searchQuery.toLowerCase());
+      (a.src_ip || '').includes(searchQuery) ||
+      (a.dst_ip || '').includes(searchQuery) ||
+      (a.flow_id || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (a.threat_class || '').toLowerCase().includes(searchQuery.toLowerCase());
     return matchesThreat && matchesSev && matchesSearch;
   });
 
@@ -212,8 +212,8 @@ export const AlertTable: React.FC = () => {
                     </td>
 
                     {/* Evidence */}
-                    <td className="py-2.5 px-3 text-slate-600 truncate max-w-xs font-sans text-xs">
-                      {alert.evidence.summary}
+                    <td className="py-2.5 px-3 text-slate-400 truncate max-w-xs font-sans text-xs">
+                      {alert.evidence?.summary || 'N/A'}
                     </td>
 
                     {/* Inspect Arrow */}
